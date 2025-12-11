@@ -1,0 +1,5 @@
+{
+  "name": "Copy of AudioScribe - Serviço de Transcrição",
+  "description": "Uma aplicação moderna em React para transcrição de áudio utilizando a API do Google Gemini. Interface totalmente localizada em Português.",
+  "requestFramePermissions": []
+}
