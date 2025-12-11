@@ -6,7 +6,14 @@ export enum TranscriptionStatus {
   ERROR = 'error',
 }
 
+export interface TranscriptionSegment {
+  start: number;
+  end: number;
+  text: string;
+}
+
 export interface TranscriptionResponse {
   text: string;
+  segments: TranscriptionSegment[];
   confidence: number;
 }

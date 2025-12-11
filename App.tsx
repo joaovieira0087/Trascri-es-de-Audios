@@ -3,12 +3,12 @@ import { Mic, Loader2, Sparkles, Github } from 'lucide-react';
 import FileUpload from './components/FileUpload';
 import TranscriptionDisplay from './components/TranscriptionDisplay';
 import { transcribeAudio } from './services/transcriptionService';
-import { TranscriptionStatus } from './types';
+import { TranscriptionStatus, TranscriptionResponse } from './types';
 
 const App: React.FC = () => {
   const [status, setStatus] = useState<TranscriptionStatus>(TranscriptionStatus.IDLE);
   const [file, setFile] = useState<File | null>(null);
-  const [transcription, setTranscription] = useState<string>('');
+  const [result, setResult] = useState<TranscriptionResponse | null>(null);
 
   const handleFileSelect = useCallback(async (selectedFile: File) => {
     setFile(selectedFile);
@@ -17,7 +17,7 @@ const App: React.FC = () => {
 
     try {
       const response = await transcribeAudio(selectedFile);
-      setTranscription(response.text);
+      setResult(response);
       setStatus(TranscriptionStatus.COMPLETED);
     } catch (error) {
       console.error(error);
@@ -27,7 +27,7 @@ const App: React.FC = () => {
 
   const handleReset = () => {
     setFile(null);
-    setTranscription('');
+    setResult(null);
     setStatus(TranscriptionStatus.IDLE);
   };
 
@@ -41,7 +41,7 @@ const App: React.FC = () => {
               <Mic size={20} />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-red-600">
-              AudioScribe
+              ClariaAI
             </span>
           </div>
           <a href="#" className="text-slate-400 hover:text-blue-600 transition-colors">
@@ -54,17 +54,21 @@ const App: React.FC = () => {
       <main className="flex-grow flex flex-col items-center justify-start pt-16 pb-12 px-4 sm:px-6">
         
         {/* Header Text */}
-        <div className="text-center max-w-2xl mb-12">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-            Áudio para Texto, <br/>
-            <span className="text-blue-600 relative inline-block">
-              Simplificado
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-red-500/20 -rotate-1 rounded-full"></span>
-            </span>.
+        <div className="text-center max-w-3xl mb-12">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+            ClariaAI: <br className="sm:hidden" />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500">
+              Transcrição, Resumo
+            </span> 
+            <br />
+            <span className="relative inline-block text-slate-900 mt-2">
+              e Análise de Áudio.
+              <span className="absolute bottom-1 left-0 w-full h-3 bg-red-500/10 -rotate-1 rounded-full -z-10"></span>
+            </span>
           </h1>
-          <p className="text-lg text-slate-500 leading-relaxed">
-            Envie suas gravações e deixe nossa IA cuidar do resto. <br className="hidden sm:block"/>
-            Transcrição rápida, precisa e segura.
+          <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
+            Transforme suas gravações em insights claros com nossa IA avançada. <br className="hidden sm:block"/>
+            Rápido, preciso e seguro diretamente no seu navegador.
           </p>
         </div>
 
@@ -86,23 +90,25 @@ const App: React.FC = () => {
               </div>
               
               <h3 className="text-xl font-bold text-slate-900">
-                Transcrevendo...
+                Processando Áudio...
               </h3>
               
               <p className="mt-2 text-slate-500 text-center">
-                Nossa IA está analisando cada detalhe do seu áudio.
+                A ClariaAI está analisando cada detalhe da sua gravação.
               </p>
 
               <div className="mt-8 flex items-center gap-2 text-red-600 bg-red-50 px-5 py-2 rounded-full text-sm font-semibold animate-pulse border border-red-100">
                 <Sparkles size={16} />
-                <span>Processando Inteligente</span>
+                <span>Gerando Timestamps & Insights</span>
               </div>
             </div>
           )}
 
-          {status === TranscriptionStatus.COMPLETED && (
+          {status === TranscriptionStatus.COMPLETED && result && file && (
             <TranscriptionDisplay 
-              transcription={transcription} 
+              transcription={result.text}
+              segments={result.segments}
+              audioFile={file}
               onReset={handleReset} 
             />
           )}
@@ -126,7 +132,7 @@ const App: React.FC = () => {
       {/* Footer */}
       <footer className="bg-white border-t border-slate-100 py-8">
         <div className="max-w-5xl mx-auto px-4 text-center text-slate-400 text-sm">
-          <p>&copy; {new Date().getFullYear()} AudioScribe. Desenvolvido com React & Tailwind.</p>
+          <p>&copy; {new Date().getFullYear()} ClariaAI. Desenvolvido com React & Tailwind.</p>
         </div>
       </footer>
     </div>
