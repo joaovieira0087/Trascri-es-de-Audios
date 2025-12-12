@@ -24,6 +24,34 @@
       textarea::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
       }
+
+      /* Highlight styling for search */
+      mark {
+        background-color: #fef08a; /* yellow-200 */
+        color: #854d0e; /* yellow-800 */
+        border-radius: 2px;
+        padding: 0 2px;
+      }
+
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        #printable-content, #printable-content * {
+          visibility: visible;
+        }
+        #printable-content {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          padding: 20px;
+        }
+        /* Hide buttons, tabs, players in print mode if they happen to be inside printable area */
+        .no-print {
+          display: none !important;
+        }
+      }
     </style>
   <script type="importmap">
 {
